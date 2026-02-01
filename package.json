@@ -1,0 +1,19 @@
+{
+  "name": "gan-art-service",
+  "version": "1.0.0",
+  "description": "Pay-per-generation AI art service using $GAN token",
+  "type": "module",
+  "main": "src/index.mjs",
+  "scripts": {
+    "start": "node src/index.mjs",
+    "monitor": "node src/payment-monitor.mjs",
+    "test": "node src/test.mjs"
+  },
+  "dependencies": {
+    "viem": "^2.45.1",
+    "dotenv": "^17.2.3"
+  },
+  "keywords": ["ai", "art", "generation", "crypto", "payment"],
+  "author": "GanlandNFT",
+  "license": "MIT"
+}
