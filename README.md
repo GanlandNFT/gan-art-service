@@ -40,16 +40,7 @@ Revenue above costs goes to the Fractal Visions treasury.
 
 ### How to Generate Art
 
-**Option 1: Bankrbot (Easiest)**
-```
-1. Tweet: @GanlandNFT create a cosmic fractal eye
-2. GAN replies with payment instructions
-3. Tweet: @bankrbot send 500 $GAN to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55
-4. Reply to GAN with your wallet address
-5. Receive your art!
-```
-
-**Option 2: Ganland Wallet**
+**Option 1: Ganland Wallet (Recommended)**
 ```
 1. Tweet: @GanlandNFT create wallet
 2. Fund your wallet with ETH (gas) + 500 $GAN
@@ -57,12 +48,13 @@ Revenue above costs goes to the Fractal Visions treasury.
 4. Art is auto-generated from your wallet balance!
 ```
 
-**Option 3: Direct Transfer**
+**Option 2: Direct Transfer**
 ```
 1. Tweet: @GanlandNFT [your art prompt]
-2. Send 500 $GAN to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55 on Base
-3. Reply with your sending wallet address
-4. Receive your art!
+2. GAN replies with payment instructions
+3. Send 500 $GAN to the payment wallet on Base
+4. Reply with your sending wallet address
+5. Receive your art!
 ```
 
 ### Payment Wallet

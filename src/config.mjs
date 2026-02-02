@@ -1,8 +1,7 @@
 /**
  * GAN Art Service Configuration
  * 
- * Payment Wallet: 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55 (bankr wallet)
- * ⚠️ DO NOT USE: 0xF393...57c6 (seed was lost)
+ * Payment Wallet: 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55
  */
 
 export const CONFIG = {
@@ -91,10 +90,6 @@ export const CONFIG = {
   
   // === PAYMENT METHODS ===
   PAYMENT_METHODS: {
-    BANKRBOT: {
-      enabled: true,
-      instructions: '@bankrbot send {amount} $GAN to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55'
-    },
     GANLAND_WALLET: {
       enabled: true,
       instructions: 'Fund your Ganland wallet with $GAN, then request art'
@@ -144,14 +139,11 @@ export function getPaymentInstructions(tier = 'STANDARD') {
 
 📋 Payment Options:
 
-1️⃣ Via Bankrbot (easiest):
-   Tweet: @bankrbot send ${pricing.display} to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55
-
-2️⃣ Via Ganland Wallet:
+1️⃣ Via Ganland Wallet (recommended):
    Tweet: @GanlandNFT create wallet
    Fund with ETH + $GAN, then request art
 
-3️⃣ Direct Transfer:
+2️⃣ Direct Transfer:
    Send ${pricing.display} to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55 on Base
 
 ⏰ Payment window: 30 minutes
