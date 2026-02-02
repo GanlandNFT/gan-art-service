@@ -1,123 +1,172 @@
-# GAN Art Service 🎨
+# GAN Art Service
 
-Pay-per-generation AI art service using **$GAN** token on Base.
+Pay-per-generation AI art service powered by $GAN token on Base.
 
-## How It Works
+## 🎨 Overview
 
-### For Users
+GAN Art Service lets anyone generate AI art by paying with $GAN tokens. Simply mention @GanlandNFT on X with your prompt, pay with $GAN, and receive custom AI-generated artwork.
 
-1. **Tag @GanlandNFT** on X with your art prompt:
-   ```
-   @GanlandNFT generate a cyberpunk cat with neon lights
-   ```
+**Live on X:** [@GanlandNFT](https://x.com/GanlandNFT)
 
-2. **GAN replies** with payment instructions:
-   ```
-   🎨 Art generation request received!
-   
-   💰 Price: 500 $GAN
-   📬 Send to: 0xF393...57C6
-   🔗 Order ID: abc123
-   
-   Reply with your tx hash or wallet address after payment!
-   ```
+## 💰 Pricing
 
-3. **Send $GAN tokens** to the wallet from any address
+| Tier | Price | Description |
+|------|-------|-------------|
+| Standard | 500 $GAN | AI art generation (~30-60 sec) |
+| Premium | 1000 $GAN | Higher quality + upscaling |
+| Bulk (5) | 2000 $GAN | 5 images at 20% discount |
 
-4. **Reply with your wallet address** so GAN can match the payment:
-   ```
-   @GanlandNFT paid from 0xYourWallet...
-   ```
+**Free Tier:** Featured artists on Fractal Visions get free generations.
 
-5. **GAN confirms & generates** your art, posting it as a reply!
+### Cost Breakdown
+- Leonardo AI: ~$0.03/image
+- Operational buffer: +10%
+- Artist fund: +5%
+- **Total cost basis:** ~$0.035/image
 
-### Free Tier
-These accounts get free generations:
-- @iglivision
-- @artfractalicia  
-- @fractal_visions
+Revenue above costs goes to the Fractal Visions treasury.
 
-## Pricing
+## 🔗 Token Info
 
-| Tier | Price | Notes |
-|------|-------|-------|
-| Standard | 500 $GAN | ~$0.50 value |
-| Allowlist | FREE | Core team |
+- **$GAN Token:** `0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07`
+- **Chain:** Base (8453)
+- **DEX:** [DexScreener](https://dexscreener.com/base/0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07)
 
-*Prices may adjust based on token value and API costs*
+⚠️ **Liquidity Warning:** Current pool liquidity is ~$24K. Large swaps (>$500) may experience slippage.
 
-## Technical Details
+---
 
-### Token Info
-- **$GAN**: `0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07`
-- **Chain**: Base (8453)
-- **Payment Wallet**: `0xF393AA12E547880b76c5b7Ff8151F539011257C6`
+## 📖 For Users
+
+### How to Generate Art
+
+**Option 1: Bankrbot (Easiest)**
+```
+1. Tweet: @GanlandNFT create a cosmic fractal eye
+2. GAN replies with payment instructions
+3. Tweet: @bankrbot send 500 $GAN to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55
+4. Reply to GAN with your wallet address
+5. Receive your art!
+```
+
+**Option 2: Ganland Wallet**
+```
+1. Tweet: @GanlandNFT create wallet
+2. Fund your wallet with ETH (gas) + 500 $GAN
+3. Tweet: @GanlandNFT [your art prompt]
+4. Art is auto-generated from your wallet balance!
+```
+
+**Option 3: Direct Transfer**
+```
+1. Tweet: @GanlandNFT [your art prompt]
+2. Send 500 $GAN to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55 on Base
+3. Reply with your sending wallet address
+4. Receive your art!
+```
+
+### Payment Wallet
+```
+0x834b9617aa6291dd6d246402b3e05d1e2efe3c55
+```
+[View on Basescan](https://basescan.org/address/0x834b9617aa6291dd6d246402b3e05d1e2efe3c55)
+
+---
+
+## 🛠️ For Developers
 
 ### Architecture
 
 ```
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│  X Mention  │ ──▶  │  GAN Agent   │ ──▶  │  Leonardo   │
-│  @GanlandNFT│      │  (Clawdbot)  │      │  API        │
-└─────────────┘      └──────────────┘      └─────────────┘
-                            │
-                            ▼
-                     ┌──────────────┐
-                     │  Payment     │
-                     │  Monitor     │
-                     │  (viem)      │
-                     └──────────────┘
-                            │
-                            ▼
-                     ┌──────────────┐
-                     │  $GAN Token  │
-                     │  on Base     │
-                     └──────────────┘
+┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│  X Mentions     │────▶│  GAN Art Service │────▶│  Leonardo AI    │
+│  (@GanlandNFT)  │     │                  │     │  (Generation)   │
+└─────────────────┘     └──────────────────┘     └─────────────────┘
+                               │
+                               ▼
+                        ┌──────────────────┐
+                        │  Payment Monitor │
+                        │  (Base Chain)    │
+                        └──────────────────┘
+                               │
+                               ▼
+                        ┌──────────────────┐
+                        │  R2 Storage      │
+                        │  (Image Archive) │
+                        └──────────────────┘
 ```
 
-### Order Flow
-
-1. User mentions @GanlandNFT with prompt
-2. GAN creates pending order, replies with payment info
-3. User sends $GAN to wallet
-4. Payment monitor detects transfer
-5. User replies with wallet address to link payment
-6. GAN matches payment → generates art → posts reply
-
-### Files
+### Project Structure
 
 ```
 gan-art-service/
 ├── src/
-│   ├── config.mjs         # Configuration & constants
-│   ├── payment-monitor.mjs # Watch for $GAN transfers
-│   └── index.mjs          # Main service
+│   ├── config.mjs          # Pricing, wallets, settings
+│   └── payment-monitor.mjs # Blockchain payment detection
 ├── data/
-│   └── orders.json        # Order tracking
+│   └── orders.json         # Order tracking (generated)
+├── package.json
 └── README.md
 ```
 
-## Commands
+### Installation
 
 ```bash
-# Watch for payments
-node src/payment-monitor.mjs watch
-
-# Check $GAN balance
-node src/payment-monitor.mjs balance
-
-# View orders
-node src/payment-monitor.mjs orders
+git clone https://github.com/GanlandNFT/gan-art-service.git
+cd gan-art-service
+npm install
 ```
 
-## Future Enhancements
+### Configuration
 
-- [ ] Auto-detect wallet from ENS
-- [ ] Support ETH/USDC payments
-- [ ] Bulk generation discounts
-- [ ] Style presets
-- [ ] Integration with Virtuals ACP
+Key settings in `src/config.mjs`:
+
+```javascript
+CONFIG = {
+  GAN_WALLET: '0x834b9617aa6291dd6d246402b3e05d1e2efe3c55',
+  GAN_TOKEN: '0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07',
+  CHAIN_ID: 8453,
+  
+  PRICING: {
+    STANDARD: { amount: 500n * 10n ** 18n, display: '500 $GAN' },
+    PREMIUM: { amount: 1000n * 10n ** 18n, display: '1000 $GAN' },
+    BULK_5: { amount: 2000n * 10n ** 18n, display: '2000 $GAN', imageCount: 5 }
+  },
+  
+  FREE_ALLOWLIST: ['iglivision', 'artfractalicia', 'fractal_visions']
+}
+```
+
+### Payment Flow
+
+1. **Order Created** - User mentions @GanlandNFT with prompt
+2. **Instructions Sent** - Bot replies with payment options
+3. **Payment Detected** - Monitor watches for $GAN transfers
+4. **Art Generated** - Leonardo AI creates the image
+5. **Delivery** - Bot replies with the artwork
+
+### Related Repositories
+
+- **[ganland-wallet](https://github.com/GanlandNFT/ganland-wallet)** - HD wallet generation for users
+- **[fractal-nft-infra](https://github.com/GanlandNFT/fractal-nft-infra)** - Smart contracts
 
 ---
 
-Built by **GAN** 🤖 for the Fractal Visions ecosystem.
+## 🎁 Artist Fund
+
+5% of paid generations go to the Featured Artist Fund. Artists on the Fractal Visions marketplace free tier receive:
+- Free art generations
+- Share of artist fund rewards
+- Exposure on @GanlandNFT timeline
+
+**Apply:** Contact [@IGLIVISION](https://x.com/IGLIVISION) or [@artfractalicia](https://x.com/artfractalicia)
+
+---
+
+## 📄 License
+
+MIT
+
+---
+
+*Part of the [Fractal Visions](https://fractalvisions.io) ecosystem*

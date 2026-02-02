@@ -1,68 +1,109 @@
 /**
  * GAN Art Service Configuration
  * 
- * Wallet: 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55 (bankr wallet)
- * Note: Previous wallet 0xF393...57c6 seed was lost - DO NOT USE
+ * Payment Wallet: 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55 (bankr wallet)
+ * ⚠️ DO NOT USE: 0xF393...57c6 (seed was lost)
  */
 
 export const CONFIG = {
-  // === PAYMENT WALLET (BANKR) ===
-  // This is the ONLY wallet that accepts $GAN for image generation
+  // === PAYMENT WALLET ===
   GAN_WALLET: '0x834b9617aa6291dd6d246402b3e05d1e2efe3c55',
   
-  // $GAN Token on Base
+  // === TOKEN INFO ===
   GAN_TOKEN: '0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07',
   CHAIN_ID: 8453, // Base
   
-  // === PRICING ===
-  // Cost breakdown:
-  // - Leonardo API: ~$0.03/image
-  // - + 10% buffer: $0.003
-  // - + 5% artist fund: $0.00165
-  // - Total cost basis: ~$0.035
-  // We charge 500 $GAN (healthy margin at current prices)
+  // === PRICING TIERS ===
+  // Base cost: Leonardo API ~$0.03/image
+  // + 10% operational buffer
+  // + 5% artist fund allocation
+  // Total cost basis: ~$0.035/image
+  // 
+  // Current liquidity: ~$24K - warn on large swaps!
   
-  PRICE_PER_IMAGE: 500n * 10n ** 18n, // 500 $GAN
+  PRICING: {
+    // Standard tier - 500 $GAN (~$0.50 at current prices)
+    STANDARD: {
+      amount: 500n * 10n ** 18n,
+      display: '500 $GAN',
+      description: 'Standard AI art generation'
+    },
+    
+    // Premium tier - higher quality/resolution
+    PREMIUM: {
+      amount: 1000n * 10n ** 18n,
+      display: '1000 $GAN',
+      description: 'Premium quality with upscaling'
+    },
+    
+    // Bulk discount - 5 images
+    BULK_5: {
+      amount: 2000n * 10n ** 18n,
+      display: '2000 $GAN',
+      description: '5 images (20% discount)',
+      imageCount: 5
+    }
+  },
+  
+  // Default pricing
+  PRICE_PER_IMAGE: 500n * 10n ** 18n,
   PRICE_DISPLAY: '500 $GAN',
   
-  // Revenue allocation (of profit after API costs)
-  ARTIST_FUND_PERCENT: 5, // 5% to featured artist fund
+  // === REVENUE ALLOCATION ===
+  // From each paid generation:
+  ALLOCATION: {
+    API_COST_PERCENT: 6,      // ~$0.03 of $0.50 = 6%
+    BUFFER_PERCENT: 4,        // 10% of API cost = ~0.6% of revenue
+    ARTIST_FUND_PERCENT: 5,   // 5% to featured artist rewards
+    TREASURY_PERCENT: 85      // Remainder to Fractal Visions treasury
+  },
   
   // === FREE TIER ===
   // Featured artists on Fractal Visions marketplace
-  // They get free generations + share of artist fund rewards
+  // Benefits: Free generations + share of artist fund rewards
   FREE_ALLOWLIST: [
     'iglivision',
     'artfractalicia', 
-    'fractal_visions'
+    'fractal_visions',
+    'ganlandnft'  // GAN's own account for timeline posts
   ],
   
   // === NETWORK ===
   RPC_URL: 'https://mainnet.base.org',
+  BASESCAN_URL: 'https://basescan.org',
+  DEXSCREENER_URL: 'https://dexscreener.com/base/0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07',
   
   // === ORDER SETTINGS ===
   ORDER_EXPIRY_MS: 30 * 60 * 1000, // 30 minutes to pay
   CONFIRMATIONS_REQUIRED: 2,
   
-  // === X INTEGRATION ===
-  // Bot handle for mentions
+  // === LIQUIDITY WARNING ===
+  // Current pool liquidity: ~$24K
+  // Warn users about slippage on large purchases
+  LIQUIDITY: {
+    currentUSD: 24000,
+    warnThresholdUSD: 500,  // Warn if swap > $500
+    warnMessage: '⚠️ Large swap detected. Current liquidity is ~$24K. Consider smaller amounts to minimize slippage.'
+  },
+  
+  // === BOT CONFIG ===
   BOT_HANDLE: 'ganlandnft',
   
-  // Payment instruction template
-  PAYMENT_INSTRUCTIONS: `
-🎨 GAN Art Service
-
-Price: 500 $GAN
-
-To pay:
-1. Send 500 $GAN to:
-   0x834b...3c55
-
-2. Reply with your wallet address after sending
-
-⏰ Payment window: 30 minutes
-🔗 $GAN on Base: basescan.org/token/0xc2fa...8b07
-  `.trim()
+  // === PAYMENT METHODS ===
+  PAYMENT_METHODS: {
+    BANKRBOT: {
+      enabled: true,
+      instructions: '@bankrbot send {amount} $GAN to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55'
+    },
+    GANLAND_WALLET: {
+      enabled: true,
+      instructions: 'Fund your Ganland wallet with $GAN, then request art'
+    },
+    DIRECT_TRANSFER: {
+      enabled: true,
+      instructions: 'Send $GAN directly to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55'
+    }
+  }
 };
 
 // ERC20 ABI for Transfer event monitoring
@@ -82,5 +123,38 @@ export const ERC20_ABI = [
     inputs: [{ name: 'account', type: 'address' }],
     outputs: [{ name: '', type: 'uint256' }],
     stateMutability: 'view'
+  },
+  {
+    type: 'function',
+    name: 'decimals',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint8' }],
+    stateMutability: 'view'
   }
 ];
+
+// Helper to format payment instructions
+export function getPaymentInstructions(tier = 'STANDARD') {
+  const pricing = CONFIG.PRICING[tier] || CONFIG.PRICING.STANDARD;
+  
+  return `
+🎨 GAN Art Service - ${pricing.description}
+
+💰 Price: ${pricing.display}
+
+📋 Payment Options:
+
+1️⃣ Via Bankrbot (easiest):
+   Tweet: @bankrbot send ${pricing.display} to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55
+
+2️⃣ Via Ganland Wallet:
+   Tweet: @GanlandNFT create wallet
+   Fund with ETH + $GAN, then request art
+
+3️⃣ Direct Transfer:
+   Send ${pricing.display} to 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55 on Base
+
+⏰ Payment window: 30 minutes
+🔗 Get $GAN: dexscreener.com/base/$GAN
+`.trim();
+}
