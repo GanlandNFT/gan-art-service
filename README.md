@@ -73,9 +73,11 @@ As $GAN price increases, fewer tokens are needed per generation!
 
 ### Payment Wallet
 ```
-0x834b9617aa6291dd6d246402b3e05d1e2efe3c55
+0xc4EF7d096541338FBE007E146De4a7Cd99cb9e40
 ```
-[View on Basescan](https://basescan.org/address/0x834b9617aa6291dd6d246402b3e05d1e2efe3c55)
+[View on Basescan](https://basescan.org/address/0xc4EF7d096541338FBE007E146De4a7Cd99cb9e40)
+
+> **ENS:** `ganland.eth` → points to this wallet
 
 ---
 
