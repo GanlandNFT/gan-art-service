@@ -2,12 +2,17 @@
  * GAN Art Service Configuration
  * Dynamic pricing based on $GAN token price
  * 
- * Payment Wallet: 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55
+ * Payment Wallet: 0xc4EF7d096541338FBE007E146De4a7Cd99cb9e40
+ * Derived from Ganland HD wallet system (user: gan-service)
+ * 
+ * DEPRECATED: 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55 (no key access)
+ * DEPRECATED: 0xF393AA12E547880b76c5b7Ff8151F539011257C6 (Austin Griffith scaffold default)
  */
 
 export const CONFIG = {
   // === PAYMENT WALLET ===
-  GAN_WALLET: '0x834b9617aa6291dd6d246402b3e05d1e2efe3c55',
+  // Controlled by GAN agent via HD wallet master seed
+  GAN_WALLET: '0xc4EF7d096541338FBE007E146De4a7Cd99cb9e40',
   
   // === TOKEN INFO ===
   GAN_TOKEN: '0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07',
