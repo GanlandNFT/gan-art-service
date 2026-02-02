@@ -8,31 +8,43 @@ GAN Art Service lets anyone generate AI art by paying with $GAN tokens. Simply m
 
 **Live on X:** [@GanlandNFT](https://x.com/GanlandNFT)
 
-## 💰 Pricing
+## 💰 Dynamic Pricing
 
-| Tier | Price | Description |
-|------|-------|-------------|
-| Standard | 500 $GAN | AI art generation (~30-60 sec) |
-| Premium | 1000 $GAN | Higher quality + upscaling |
-| Bulk (5) | 2000 $GAN | 5 images at 20% discount |
+Pricing adjusts automatically based on the current $GAN token price to maintain consistent USD value.
 
-**Free Tier:** Featured artists on Fractal Visions get free generations.
+**Current Fee:** ~500,000 $GAN per generation (at current prices)
+
+### Sliding Scale
+| $GAN Price (USD) | Fee ($GAN) | ~USD Value |
+|------------------|------------|------------|
+| < $0.0000005 | 500,000 | ~$0.12 |
+| $0.0000005 - $0.000001 | 250,000 | ~$0.12 |
+| $0.000001 - $0.000002 | 125,000 | ~$0.12 |
+| $0.000002 - $0.000005 | 50,000 | ~$0.12 |
+| $0.000005 - $0.00001 | 25,000 | ~$0.12 |
+| $0.00001 - $0.0001 | 2,500 | ~$0.12 |
+| > $0.0001 | 100 (min) | Variable |
+
+As $GAN price increases, fewer tokens are needed per generation!
 
 ### Cost Breakdown
-- Leonardo AI: ~$0.03/image
-- Operational buffer: +10%
-- Artist fund: +5%
-- **Total cost basis:** ~$0.035/image
+- Leonardo API: ~$0.05-$0.13/image
+- Profit margin: $0.10 flat + 10% additional
+- **Target:** ~$0.12-$0.15 USD per generation
 
-Revenue above costs goes to the Fractal Visions treasury.
+### Revenue Allocation
+| Category | Share |
+|----------|-------|
+| API Costs | ~$0.10 |
+| Flat Profit | $0.10 |
+| Founders (5%) | Operational overhead |
+| Artist Fund (5%) | Featured artist rewards |
 
 ## 🔗 Token Info
 
 - **$GAN Token:** `0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07`
 - **Chain:** Base (8453)
 - **DEX:** [DexScreener](https://dexscreener.com/base/0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07)
-
-⚠️ **Liquidity Warning:** Current pool liquidity is ~$24K. Large swaps (>$500) may experience slippage.
 
 ---
 
@@ -43,7 +55,7 @@ Revenue above costs goes to the Fractal Visions treasury.
 **Option 1: Ganland Wallet (Recommended)**
 ```
 1. Tweet: @GanlandNFT create wallet
-2. Fund your wallet with ETH (gas) + 500 $GAN
+2. Fund your wallet with ETH (gas) + $GAN
 3. Tweet: @GanlandNFT [your art prompt]
 4. Art is auto-generated from your wallet balance!
 ```
@@ -51,8 +63,8 @@ Revenue above costs goes to the Fractal Visions treasury.
 **Option 2: Direct Transfer**
 ```
 1. Tweet: @GanlandNFT [your art prompt]
-2. GAN replies with payment instructions
-3. Send 500 $GAN to the payment wallet on Base
+2. GAN replies with current fee & payment address
+3. Send $GAN to the payment wallet on Base
 4. Reply with your sending wallet address
 5. Receive your art!
 ```
@@ -62,6 +74,29 @@ Revenue above costs goes to the Fractal Visions treasury.
 0x834b9617aa6291dd6d246402b3e05d1e2efe3c55
 ```
 [View on Basescan](https://basescan.org/address/0x834b9617aa6291dd6d246402b3e05d1e2efe3c55)
+
+---
+
+## 🎁 Featured Artists (Free Tier)
+
+Featured artists on Fractal Visions receive **free generations** and a share of the Artist Fund.
+
+### Current Featured Artists
+| Handle | Name | Role |
+|--------|------|------|
+| @IGLIVISION | IGLI | Co-founder |
+| @artfractalicia | Fractalicia | Co-founder |
+| @fractal_visions | Fractal Visions | Brand |
+| @GanlandNFT | GAN | AI Agent |
+
+### Benefits
+- ✅ Unlimited free art generations
+- ✅ Share of 5% Artist Fund rewards
+- ✅ Exposure on @GanlandNFT timeline
+- ✅ Priority support
+
+### Apply to Join
+Contact [@IGLIVISION](https://x.com/IGLIVISION) or [@artfractalicia](https://x.com/artfractalicia)
 
 ---
 
@@ -77,14 +112,14 @@ Revenue above costs goes to the Fractal Visions treasury.
                                │
                                ▼
                         ┌──────────────────┐
-                        │  Payment Monitor │
-                        │  (Base Chain)    │
+                        │  DexScreener API │
+                        │  (Price Oracle)  │
                         └──────────────────┘
                                │
                                ▼
                         ┌──────────────────┐
-                        │  R2 Storage      │
-                        │  (Image Archive) │
+                        │  Payment Monitor │
+                        │  (Base Chain)    │
                         └──────────────────┘
 ```
 
@@ -93,7 +128,7 @@ Revenue above costs goes to the Fractal Visions treasury.
 ```
 gan-art-service/
 ├── src/
-│   ├── config.mjs          # Pricing, wallets, settings
+│   ├── config.mjs          # Pricing, wallets, featured artists
 │   └── payment-monitor.mjs # Blockchain payment detection
 ├── data/
 │   └── orders.json         # Order tracking (generated)
@@ -101,57 +136,25 @@ gan-art-service/
 └── README.md
 ```
 
-### Installation
-
-```bash
-git clone https://github.com/GanlandNFT/gan-art-service.git
-cd gan-art-service
-npm install
-```
-
-### Configuration
-
-Key settings in `src/config.mjs`:
+### Key Functions
 
 ```javascript
-CONFIG = {
-  GAN_WALLET: '0x834b9617aa6291dd6d246402b3e05d1e2efe3c55',
-  GAN_TOKEN: '0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07',
-  CHAIN_ID: 8453,
-  
-  PRICING: {
-    STANDARD: { amount: 500n * 10n ** 18n, display: '500 $GAN' },
-    PREMIUM: { amount: 1000n * 10n ** 18n, display: '1000 $GAN' },
-    BULK_5: { amount: 2000n * 10n ** 18n, display: '2000 $GAN', imageCount: 5 }
-  },
-  
-  FREE_ALLOWLIST: ['iglivision', 'artfractalicia', 'fractal_visions']
-}
+import { fetchGanPrice, calculateGanFee, isFreeUser } from './src/config.mjs';
+
+// Get current price
+const price = await fetchGanPrice(); // e.g., 0.0000002328
+
+// Calculate fee based on price
+const fee = calculateGanFee(price); // e.g., 500000
+
+// Check if user is free tier
+const isFree = isFreeUser('iglivision'); // true
 ```
-
-### Payment Flow
-
-1. **Order Created** - User mentions @GanlandNFT with prompt
-2. **Instructions Sent** - Bot replies with payment options
-3. **Payment Detected** - Monitor watches for $GAN transfers
-4. **Art Generated** - Leonardo AI creates the image
-5. **Delivery** - Bot replies with the artwork
 
 ### Related Repositories
 
-- **[ganland-wallet](https://github.com/GanlandNFT/ganland-wallet)** - HD wallet generation for users
+- **[ganland-wallet](https://github.com/GanlandNFT/ganland-wallet)** - HD wallet generation
 - **[fractal-nft-infra](https://github.com/GanlandNFT/fractal-nft-infra)** - Smart contracts
-
----
-
-## 🎁 Artist Fund
-
-5% of paid generations go to the Featured Artist Fund. Artists on the Fractal Visions marketplace free tier receive:
-- Free art generations
-- Share of artist fund rewards
-- Exposure on @GanlandNFT timeline
-
-**Apply:** Contact [@IGLIVISION](https://x.com/IGLIVISION) or [@artfractalicia](https://x.com/artfractalicia)
 
 ---
 
