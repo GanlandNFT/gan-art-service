@@ -1,5 +1,7 @@
 # GAN Art Service
 
+<img width="100" alt="GAN Logo" src="https://raw.githubusercontent.com/GanlandNFT/ganland-brand-kit/main/logos/gan-logo-primary.jpg" align="right">
+
 Pay-per-generation AI art service powered by $GAN token on Base.
 
 ## 🎨 Overview

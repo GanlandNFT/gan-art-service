@@ -11,8 +11,9 @@
 
 export const CONFIG = {
   // === PAYMENT WALLET ===
-  // Controlled by GAN agent via HD wallet master seed
-  GAN_WALLET: '0xc4EF7d096541338FBE007E146De4a7Cd99cb9e40',
+  // BANKR-created wallet, accessible via X (@GanlandNFT) and email
+  // IGLI has access through BANKR integration
+  GAN_WALLET: '0x834b9617aa6291dd6d246402b3e05d1e2efe3c55',
   
   // === TOKEN INFO ===
   GAN_TOKEN: '0xc2fa8cfa51B02fDeb84Bb22d3c9519EAEB498b07',
